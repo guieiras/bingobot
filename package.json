@@ -11,6 +11,7 @@
     "botbuilder-adapter-slack": "^1.0.8",
     "botbuilder-storage-mongodb": "^0.9.5",
     "botkit": "^4.6.2",
-    "botkit-plugin-cms": "^1.0.3"
+    "botkit-plugin-cms": "^1.0.3",
+    "dotenv": "^8.2.0"
   }
 }
