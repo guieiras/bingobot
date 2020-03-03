@@ -24,10 +24,7 @@ if (process.env.MONGO_URI) {
   });
 }
 
-const adapter = new SlackAdapter({
-  // REMOVE THIS OPTION AFTER YOU HAVE CONFIGURED YOUR APP!
-  enable_incomplete: true,
-  
+const adapter = new SlackAdapter({  
   // parameters used to secure webhook endpoint
   verificationToken: process.env.VERIFICATION_TOKEN,
   clientSigningSecret: process.env.CLIENT_SIGNING_SECRET,  
