@@ -12,37 +12,37 @@ module.exports = function(controller) {
       bot.say('I AM AWOKEN.');
     }
   });
-  
+
   controller.on('direct_message', async(bot, message) => {
     await bot.reply(message,'I heard a private message');
   });
-  
+
   controller.hears('dm me', 'message', async(bot, message) => {
     await bot.startPrivateConversation(message.user);
     await bot.say(`Let's talk in private.`);
   });
-  
+
   controller.on('direct_mention', async(bot, message) => {
     await bot.reply(message, `I heard a direct mention that said "${ message.text }"`);
   });
-  
+
   controller.on('mention', async(bot, message) => {
     await bot.reply(message, `You mentioned me when you said "${ message.text }"`);
   });
-  
+
   controller.hears('ephemeral', 'message,direct_message', async(bot, message) => {
     await bot.replyEphemeral(message,'This is an ephemeral reply sent using bot.replyEphemeral()!');
   });
-  
+
   controller.hears('threaded', 'message,direct_message', async(bot, message) => {
     await bot.replyInThread(message,'This is a reply in a thread!');
-    
+
     await bot.startConversationInThread(message.channel, message.user, message.incoming_message.channelData.ts);
     await bot.say('And this should also be in that thread!');
   });
-  
+
   controller.hears('blocks', 'message', async(bot, message) => {
-    
+
     await bot.reply(message,{
       blocks: [
         {
@@ -128,13 +128,13 @@ module.exports = function(controller) {
         }
       ]
     });
-    
+
   });
-  
+
   controller.on('block_actions', async (bot, message) => {
     await bot.reply(message, `Sounds like your choice is ${ message.incoming_message.channelData.actions[0].value }`)
   });
-  
+
   controller.on('slash_command', async(bot, message) => {
     if (message.text === 'plain') {
       await bot.reply(message, 'This is a plain reply');
@@ -143,16 +143,16 @@ module.exports = function(controller) {
     } else if (message.text === 'private') {
       await bot.replyPrivate(message, 'This is a private reply');
     }
-    
+
     // set http status
     bot.httpBody({text:'You can send an immediate response using bot.httpBody()'});
-    
+
   });
-  
+
   controller.on('interactive_message', async (bot, message) => {
-    
+
     console.log('INTERACTIVE MESSAGE', message);
-    
+
     switch(message.actions[0].name) {
       case 'replace':
       await bot.replyInteractive(message,'[ A previous message was successfully replaced with this less exciting one. ]');
@@ -175,11 +175,11 @@ module.exports = function(controller) {
       await bot.reply(message, 'Got a button click!');
     }
   });
-  
-  
+
+
   controller.on('dialog_submission', async (bot, message) => {
     await bot.reply(message, 'Got a dialog submission');
-    
+
     // Return an error to Slack
     bot.dialogError([
       {
@@ -188,7 +188,7 @@ module.exports = function(controller) {
       }
     ])
   });
-  
+
   controller.on('dialog_cancellation', async (bot, message) => {
     await bot.reply(message, 'Got a dialog cancellation');
   });

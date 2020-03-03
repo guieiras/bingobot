@@ -1,6 +1,6 @@
 //  __   __  ___        ___
-// |__) /  \  |  |__/ |  |  
-// |__) \__/  |  |  \ |  |  
+// |__) /  \  |  |__/ |  |
+// |__) \__/  |  |  \ |  |
 
 // This is the main file for the bingobot bot.
 
@@ -25,20 +25,20 @@ if (process.env.MONGO_URI) {
   });
 }
 
-const adapter = new SlackAdapter({  
+const adapter = new SlackAdapter({
   // parameters used to secure webhook endpoint
   verificationToken: process.env.VERIFICATION_TOKEN,
-  clientSigningSecret: process.env.CLIENT_SIGNING_SECRET,  
-  
+  clientSigningSecret: process.env.CLIENT_SIGNING_SECRET,
+
   // auth token for a single-team app
   botToken: process.env.BOT_TOKEN,
-  
+
   // credentials used to set up oauth for multi-team apps
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  scopes: ['bot'], 
+  scopes: ['bot'],
   redirectUri: process.env.REDIRECT_URI,
-  
+
   // functions required for retrieving team-specific info
   // for use in multi-team apps
   getTokenForTeam: getTokenForTeam,
@@ -68,13 +68,13 @@ if (process.env.CMS_URI) {
 controller.ready(() => {
   // load traditional developer-created local custom feature modules
   controller.loadModules(__dirname + '/features');
-  
+
   /* catch-all that uses the CMS to trigger dialogs */
   if (controller.plugins.cms) {
     controller.on('message,direct_message', async (bot, message) => {
       let results = false;
       results = await controller.plugins.cms.testTrigger(bot, message);
-      
+
       if (results !== false) {
         // do not continue middleware!
         return false;
@@ -95,15 +95,15 @@ controller.webserver.get('/install', (req, res) => {
 controller.webserver.get('/install/auth', async (req, res) => {
   try {
     const results = await controller.adapter.validateOauthCode(req.query.code);
-    
+
     console.log('FULL OAUTH DETAILS', results);
-    
+
     // Store token by team in bot state.
     tokenCache[results.team_id] = results.bot.bot_access_token;
-    
+
     // Capture team to bot id
     userCache[results.team_id] =  results.bot.bot_user_id;
-    
+
     res.json('Success! Bot installed.');
   } catch (err) {
     console.error('OAUTH ERROR:', err);
@@ -117,11 +117,11 @@ let userCache = {};
 
 if (process.env.TOKENS) {
   tokenCache = JSON.parse(process.env.TOKENS);
-} 
+}
 
 if (process.env.USERS) {
   userCache = JSON.parse(process.env.USERS);
-} 
+}
 
 async function getTokenForTeam(teamId) {
   if (tokenCache[teamId]) {
