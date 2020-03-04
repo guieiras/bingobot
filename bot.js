@@ -116,7 +116,9 @@ controller.webserver.get('/install/auth', async (req, res) => {
     console.log('FULL OAUTH DETAILS', results);
 
     // Store token by team in bot state.
-    tokenCache[results.team_id] = results.bot.bot_access_token;
+    await controller.repositories.TokensRepository.saveTokenForTeam(
+      results.team_id, results.bot.bot_access_token
+    )
 
     // Capture team to bot id
     userCache[results.team_id] =  results.bot.bot_user_id;
@@ -129,27 +131,21 @@ controller.webserver.get('/install/auth', async (req, res) => {
   }
 });
 
-let tokenCache = {};
 let userCache = {};
 
-if (process.env.TOKENS) {
-  tokenCache = JSON.parse(process.env.TOKENS);
-}
 
 if (process.env.USERS) {
   userCache = JSON.parse(process.env.USERS);
 }
 
 async function getTokenForTeam(teamId) {
-  if (tokenCache[teamId]) {
-    return new Promise((resolve) => {
-      setTimeout(function() {
-        resolve(tokenCache[teamId]);
-      }, 150);
+  return controller
+    .repositories
+    .TokensRepository
+    .getTokenForTeam(teamId)
+    .catch(() => {
+      console.error('Token not found for team: ', teamId);
     });
-  } else {
-    console.error('Team not found in tokenCache: ', teamId);
-  }
 }
 
 async function getBotUserByTeam(teamId) {
