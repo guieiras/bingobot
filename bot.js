@@ -13,6 +13,7 @@ const { BotkitCMSHelper } = require('botkit-plugin-cms');
 const { SlackAdapter, SlackMessageTypeMiddleware, SlackEventMiddleware } = require('botbuilder-adapter-slack');
 
 const { MongoDbStorage } = require('botbuilder-storage-mongodb');
+const dbLoad = require('./repositories/database');
 
 // Load process.env values from .env file
 require('dotenv').config();
@@ -66,6 +67,8 @@ if (process.env.CMS_URI) {
 
 // Once the bot has booted up its internal services, you can use them to do stuff.
 controller.ready(() => {
+  controller.database = dbLoad({ url: process.env.MONGO_URI });
+
   // load traditional developer-created local custom feature modules
   controller.loadModules(__dirname + '/features');
 
