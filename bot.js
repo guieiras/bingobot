@@ -121,7 +121,9 @@ controller.webserver.get('/install/auth', async (req, res) => {
     )
 
     // Capture team to bot id
-    userCache[results.team_id] =  results.bot.bot_user_id;
+    await controller.repositories.BotUsersRepository.saveUserForTeam(
+      results.team_id, results.bot.bot_user_id
+    );
 
     res.json('Success! Bot installed.');
   } catch (err) {
@@ -130,13 +132,6 @@ controller.webserver.get('/install/auth', async (req, res) => {
     res.send(err.message);
   }
 });
-
-let userCache = {};
-
-
-if (process.env.USERS) {
-  userCache = JSON.parse(process.env.USERS);
-}
 
 async function getTokenForTeam(teamId) {
   return controller
@@ -149,13 +144,11 @@ async function getTokenForTeam(teamId) {
 }
 
 async function getBotUserByTeam(teamId) {
-  if (userCache[teamId]) {
-    return new Promise((resolve) => {
-      setTimeout(function() {
-        resolve(userCache[teamId]);
-      }, 150);
+  return controller
+    .repositories
+    .BotUsersRepository
+    .getUserForTeam(teamId)
+    .catch(() => {
+      console.error('Bot not found for team: ', teamId);
     });
-  } else {
-    console.error('Team not found in userCache: ', teamId);
-  }
 }
