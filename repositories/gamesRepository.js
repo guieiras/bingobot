@@ -21,5 +21,15 @@ module.exports = function GamesRepository(controller) {
     );
   }
 
-  return { GamesRepository: { createGame, findGameForChannel } };
+  async function findGameByIdAndSigningKey(id, signingKey) {
+    return controller.database.get('games').findOne(
+      { _id: id, signingKey }
+    );
+  }
+
+  return {
+    GamesRepository: {
+      createGame, findGameByIdAndSigningKey, findGameForChannel
+    }
+  };
 }

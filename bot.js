@@ -85,7 +85,7 @@ controller.ready(() => {
   }, {});
 
   // load API routes
-  apiLoad(controller.webserver, controller.repositories);
+  apiLoad(controller);
 
   // load traditional developer-created local custom feature modules
   controller.loadModules(__dirname + '/features');
