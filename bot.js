@@ -18,6 +18,7 @@ const { MongoDbStorage } = require('botbuilder-storage-mongodb');
 const fs = require('fs');
 const path = require('path');
 
+const apiLoad = require('./api');
 const dbLoad = require('./database');
 
 // Load process.env values from .env file
@@ -82,6 +83,9 @@ controller.ready(() => {
 
     return Object.assign({}, memo, repository);
   }, {});
+
+  // load API routes
+  apiLoad(controller.webserver, controller.repositories);
 
   // load traditional developer-created local custom feature modules
   controller.loadModules(__dirname + '/features');
