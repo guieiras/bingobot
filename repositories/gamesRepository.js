@@ -27,9 +27,19 @@ module.exports = function GamesRepository(controller) {
     );
   }
 
+  async function addNumberToDrawn(id, number) {
+    return controller.database.get('games').findOneAndUpdate(
+      { _id: id },
+      { $addToSet: { drawnNumbers: { number, createdAt: new Date() } } }
+    );
+  }
+
   return {
     GamesRepository: {
-      createGame, findGameByIdAndSigningKey, findGameForChannel
+      addNumberToDrawn,
+      createGame,
+      findGameByIdAndSigningKey,
+      findGameForChannel,
     }
   };
 }
