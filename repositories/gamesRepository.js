@@ -7,7 +7,9 @@ module.exports = function GamesRepository(controller) {
         config: { user, team, channel },
         createdAt: new Date(),
         finishedAt: null,
-        signingKey: cryptoRandomString({ length: 16, type: 'url-safe' })
+        signingKey: cryptoRandomString({ length: 16, type: 'url-safe' }),
+        drawnNumbers: [],
+        cards: {}
       }
     );
   }
