@@ -14,5 +14,12 @@ module.exports = function GamesRepository(controller) {
     );
   }
 
-  return { GamesRepository: { createGame } };
+  async function findGameForChannel(team, channel) {
+    return controller.database.get('games').findOne(
+      { 'config.team': team, 'config.channel': channel, finishedAt: null },
+      { sort: { createdAt: -1 } }
+    );
+  }
+
+  return { GamesRepository: { createGame, findGameForChannel } };
 }
