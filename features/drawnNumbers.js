@@ -1,12 +1,13 @@
 const {
   getAllNumbers,
   getAllNumbersInOrder,
+  lastDrawNumbers,
   numberWasDrawn
 } = require('../useCases/games/drawnNumbers');
 
 module.exports = function (controller) {
   controller.hears(
-    ['todos', 'sorteados', 'saíram', 'saiu'],
+    ['todos', 'sorteados', 'saíram', 'saiu', 'ltimos'],
     'direct_mention',
     async (bot, message) => {
       const text = message.text.toLowerCase();
@@ -40,6 +41,17 @@ module.exports = function (controller) {
         return await bot.replyInThread(
           message,
           numberWasDrawn(game, parseInt(match[1])) ? 'Sim' : 'Não'
+        );
+      }
+
+      match = text.match(/[uú]ltimos\s(\d+)/)
+      if (match) {
+        amount = parseInt(match[1]);
+        last = lastDrawNumbers(game, amount);
+        return await bot.replyInThread(
+          message,
+          `Do mais recente para o ${last.length}° mais antigo\n` +
+            last.join('\n')
         );
       }
   });

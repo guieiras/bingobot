@@ -10,6 +10,14 @@ function getAllNumbersInOrder(game) {
     .map((draw) => draw.number);
 }
 
+function lastDrawnNumbers(game, last) {
+  return game.drawnNumbers
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    .reverse()
+    .slice(0, last)
+    .map((draw) => draw.number);
+}
+
 function numberWasDrawn(game, number) {
   return game.drawnNumbers
     .filter((draw) => draw.number === number)
@@ -19,5 +27,6 @@ function numberWasDrawn(game, number) {
 module.exports = {
   getAllNumbers,
   getAllNumbersInOrder,
+  lastDrawnNumbers,
   numberWasDrawn
 }
