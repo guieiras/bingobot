@@ -1,7 +1,7 @@
 const {
   getAllNumbers,
   getAllNumbersInOrder,
-  lastDrawNumbers,
+  lastDrawnNumbers,
   numberWasDrawn
 } = require('../useCases/games/drawnNumbers');
 
@@ -14,6 +14,8 @@ module.exports = function (controller) {
       const game = await controller.repositories.GamesRepository.findGameForChannel(
         message.team, message.channel
       );
+
+      if (!game) { return; }
 
       let match;
 
@@ -47,7 +49,7 @@ module.exports = function (controller) {
       match = text.match(/[uú]ltimos\s(\d+)/)
       if (match) {
         amount = parseInt(match[1]);
-        last = lastDrawNumbers(game, amount);
+        last = lastDrawnNumbers(game, amount);
         return await bot.replyInThread(
           message,
           `Do mais recente para o ${last.length}° mais antigo\n` +
