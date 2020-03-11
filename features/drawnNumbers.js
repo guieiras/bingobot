@@ -7,7 +7,7 @@ const {
 
 module.exports = function (controller) {
   controller.hears(
-    ['todos', 'sorteados', 'saíram', 'saiu', 'ltimos'],
+    ['todos', 'sorteados', 'saí', 'sai', 'ltimos'],
     'direct_mention',
     async (bot, message) => {
       const text = message.text.toLowerCase();
